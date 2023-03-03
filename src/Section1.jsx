@@ -23,7 +23,11 @@ export default class Section1 extends React.Component {
         this.pointer = new THREE.Vector2();
         this.raycaster = new THREE.Raycaster();
 
-        this.state = {closeInfobar: false};
+        this.state = {
+            closeInfobar: false,
+            showInfobar: false
+        };
+        this.handleDeviceOrientationEvent = false;
 
         this.handleCloseInfobar = this.handleCloseInfobar.bind(this);
     }
@@ -115,6 +119,8 @@ export default class Section1 extends React.Component {
     }
 
     handleDeviceOrientation(e) {
+        this.handleDeviceOrientationEvent = true;
+
         if (!this.state.closeInfobar) {
             this.handleCloseInfobar();
         }
@@ -237,12 +243,20 @@ export default class Section1 extends React.Component {
 
         window.addEventListener("deviceorientation", this.handleDeviceOrientation.bind(this));
         window.addEventListener('resize', this.handleResize.bind(this));
+
+        setTimeout(() => {
+            if(!this.handleDeviceOrientationEvent) {
+                this.setState({
+                    showInfobar: true
+                });
+            }
+          }, "500");
     }
 
     render() {
         return (
             <div>
-                {(typeof( DeviceOrientationEvent ) !== "undefined" && typeof( DeviceOrientationEvent.requestPermission ) === "function" && !this.state.closeInfobar ) && <Infobar handleCloseInfobar={this.handleCloseInfobar} handleDeviceOrientationPermission={this.handleDeviceOrientationPermission} />}
+                {(typeof( DeviceOrientationEvent ) !== "undefined" && typeof( DeviceOrientationEvent.requestPermission ) === "function" && !this.state.closeInfobar && this.state.showInfobar ) && <Infobar handleCloseInfobar={this.handleCloseInfobar} handleDeviceOrientationPermission={this.handleDeviceOrientationPermission} />}
                 <div className="section1" onPointerMove={(e)=> this.handlePointerMove(e)} ref={ref => (this.mount = ref) }  />
             </div>
         );
