@@ -1,0 +1,13 @@
+.section1 {
+    height: 100vh;
+    position: relative;
+    width: 100vw;
+}
+
+.section1 > canvas {
+    height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+}
