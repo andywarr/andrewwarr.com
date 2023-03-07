@@ -255,10 +255,10 @@ export default class Section1 extends React.Component {
 
     render() {
         return (
-            <div>
+            <section>
                 {(typeof( DeviceOrientationEvent ) !== "undefined" && typeof( DeviceOrientationEvent.requestPermission ) === "function" && !this.state.closeInfobar && this.state.showInfobar ) && <Infobar handleCloseInfobar={this.handleCloseInfobar} handleDeviceOrientationPermission={this.handleDeviceOrientationPermission} />}
                 <div className="section1" onPointerMove={(e)=> this.handlePointerMove(e)} ref={ref => (this.mount = ref) }  />
-            </div>
+            </section>
         );
     }
 }

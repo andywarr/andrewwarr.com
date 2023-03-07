@@ -1,0 +1,31 @@
+.container {
+    align-items: center;
+	display: flex;
+    height: 100vh;
+	justify-content: center;
+	left: 0;
+    position: absolute;
+	top: 0;
+	width: 100vw;
+	z-index: 9;
+}
+
+.profile {
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+    width: 100%;
+}
+
+.section2 > div {
+	position: absolute;
+}
+
+#stage {
+    height: 100vh;
+	left: 0;
+    position: absolute;
+	top: 0;
+	width: 100vw;
+	z-index: 10;
+}
