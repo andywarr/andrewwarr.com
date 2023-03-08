@@ -19,14 +19,7 @@ export default class Section2 extends React.Component {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
 
-        this.camera = new THREE.OrthographicCamera( -window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerHeight/2, -window.innerHeight/2, -100, 100 );
-        this.camera.position.set( 0, 0, 5 );
-        this.camera.lookAt( 0, 0, 0 );
-
         this.loader = new THREE.TextureLoader();
-
-        this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-        this.material;
 
         this.mouse = new THREE.Vector2(0, 0);
         this.size = new THREE.Vector2(0, 0);
@@ -40,13 +33,9 @@ export default class Section2 extends React.Component {
     }
 
     createMesh() {
-		this.mesh = new THREE.Mesh(this.geometry, this.material);
+		this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), this.material);
 
-		if (window.innerWidth > window.innerHeight) {
-            this.mesh.scale.set(this.size.x, this.size.x, 1);
-        } else {
-            this.mesh.scale.set(this.size.y, this.size.y, 1);
-        }
+		this.setSize();
 
 		this.scene.add(this.mesh);
 	}
@@ -61,20 +50,33 @@ export default class Section2 extends React.Component {
         this.mouse.y = -( e.clientY / window.innerHeight ) * 2 + 1;
     }
 
+    handleResize() {  
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.setUpCamera();
+        this.setUpImage();
+    }
+
+    setSize() {
+        console.log(this.mesh);
+        if (window.innerWidth > window.innerHeight) {
+            this.mesh.scale.set(this.size.x, this.size.x, 1);
+        } else {
+            this.mesh.scale.set(this.size.y, this.size.y, 1);
+        }
+    }
+
     setUp() {
+        this.setUpCamera();
         this.setUpLights();
     }
 
-    setUpLights() {
-        const al = new THREE.AmbientLight(0xffffff, 2);
-        this.scene.add(al);
+    setUpCamera() {
+        this.camera = new THREE.OrthographicCamera( -window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerHeight/2, -window.innerHeight/2, -100, 100 );
+        this.camera.position.set( 0, 0, 5 );
+        this.camera.lookAt( 0, 0, 0 );
     }
 
-    componentDidMount() {
-        this.setUp();
-
-        this.mount.appendChild( this.renderer.domElement );
-
+    setUpImage() {
         this.$image = document.querySelector('.profile');
         this.getSize(this.$image, this.size);
 
@@ -99,8 +101,23 @@ export default class Section2 extends React.Component {
         });
 
 		this.createMesh();
+    }
+
+    setUpLights() {
+        const al = new THREE.AmbientLight(0xffffff, 2);
+        this.scene.add(al);
+    }
+
+    componentDidMount() {
+        this.setUp();
+
+        this.mount.appendChild( this.renderer.domElement );
+
+        this.setUpImage();
 
         this.animate();
+
+        window.addEventListener('resize', this.handleResize.bind(this));
     }
 
     render() {
