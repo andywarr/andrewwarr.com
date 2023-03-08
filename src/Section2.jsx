@@ -11,20 +11,25 @@ export default class Section2 extends React.Component {
     constructor(props) {
         super(props);
 
-        this.scene;
-		this.renderer;
-        this.camera;
+        this.scene = new THREE.Scene();
+		
+        this.renderer = new THREE.WebGLRenderer({
+			alpha: true,
+	    });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
 
-        this.loader;
+        this.camera = new THREE.OrthographicCamera( -window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerHeight/2, -window.innerHeight/2, -100, 100 );
+        this.camera.position.set( 0, 0, 5 );
+        this.camera.lookAt( 0, 0, 0 );
+
+        this.loader = new THREE.TextureLoader();
 
         this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
         this.material;
 
         this.mouse = new THREE.Vector2(0, 0);
-
-        this.uniforms;
-
-        this.sizes;
+        this.size = new THREE.Vector2(0, 0);
     }
 
     animate() {
@@ -57,23 +62,7 @@ export default class Section2 extends React.Component {
     }
 
     setUp() {
-        this.renderer = new THREE.WebGLRenderer({
-			alpha: true,
-	    });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(window.devicePixelRatio);
-
-        this.setUpCamera();
-    
-        this.scene = new THREE.Scene();
-
         this.setUpLights();
-    }
-
-    setUpCamera() {
-        this.camera = new THREE.OrthographicCamera( -window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerWidth/window.innerHeight*window.innerHeight/2, window.innerHeight/2, -window.innerHeight/2, -100, 100 );
-        this.camera.position.set( 0, 0, 5 );
-        this.camera.lookAt( 0, 0, 0 );
     }
 
     setUpLights() {
@@ -86,27 +75,11 @@ export default class Section2 extends React.Component {
 
         this.mount.appendChild( this.renderer.domElement );
 
-        this.loader = new THREE.TextureLoader();
-
         this.$image = document.querySelector('.profile');
-        this.size = new THREE.Vector2(0, 0);
         this.getSize(this.$image, this.size);
 
-        this.image = this.loader.load(this.$image.dataset.src, () => {
-            //this.image.needsUpdate = true;
-            //this.mesh.scale.set(this.sizes.x, this.sizes.y * this.image.image.height / this.image.image.width, 1.0);
-            //this.cover(this.image, 1 / 1 );
-        });
-        //this.image.matrixAutoUpdate = false;
-        //this.image.center.set(0.5, 0.75);
-		this.hoverImage = this.loader.load(this.$image.dataset.hover, () => {
-            //this.cover(this.hoverImage, 1 / 1 );
-            //this.hoverImage.needsUpdate = true;
-            //this.mesh.scale.set(this.sizes.x, this.sizes.y * this.image.image.height / this.image.image.width, 1.0);
-        });
-        //this.hoverImage.matrixAutoUpdate = false;
-        //this.hoverImage.center.set(0.5, 0.75);
-        //this.setRepeat();
+        this.image = this.loader.load(this.$image.dataset.src);
+		this.hoverImage = this.loader.load(this.$image.dataset.hover);
 
         this.uniforms = {
             u_image: { type: 't', value: this.image },
