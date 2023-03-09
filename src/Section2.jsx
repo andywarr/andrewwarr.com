@@ -45,9 +45,9 @@ export default class Section2 extends React.Component {
 		size.set(width, height);
 	}
 
-    handlePointerMove(e) { 
+    handlePointerMove(e) {
         this.mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-        this.mouse.y = -( e.clientY / window.innerHeight ) * 2 + 1;
+        this.mouse.y = -( (e.clientY - e.target.getBoundingClientRect().top) / window.innerHeight ) * 2 + 1;
     }
 
     handleResize() {  
@@ -57,7 +57,6 @@ export default class Section2 extends React.Component {
     }
 
     setSize() {
-        console.log(this.mesh);
         if (window.innerWidth > window.innerHeight) {
             this.mesh.scale.set(this.size.x, this.size.x, 1);
         } else {
