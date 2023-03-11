@@ -45,6 +45,29 @@ export default class Section2 extends React.Component {
 		size.set(width, height);
 	}
 
+    handleDeviceOrientation(e) {
+        let x = e.beta; // In degree in the range [-180,180)
+        let y = e.gamma; // In degree in the range [-90,90)
+    
+        //Constrain the x value to the range [-90,90]
+        if (x > 90) {
+            x = 90;
+        }
+        if (x < -90) {
+            x = -90;
+        }
+        if (y > 90) {
+            y = 90;
+        }
+        if (y < -90) {
+            y = -90;
+        }
+
+        this.mouse.x = ( (y + 45) / 90 ) * 2 - 1;
+        this.mouse.y = -( (x + 45) / 90 ) * 2 + 1;
+        console.log(( y / 90 ) * 2 - 1, -( x / 90 ) * 2 + 1);
+    }
+
     handlePointerMove(e) {
         this.mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
         this.mouse.y = -( (e.clientY - e.target.getBoundingClientRect().top) / window.innerHeight ) * 2 + 1;
@@ -116,6 +139,7 @@ export default class Section2 extends React.Component {
 
         this.animate();
 
+        window.addEventListener("deviceorientation", this.handleDeviceOrientation.bind(this));
         window.addEventListener('resize', this.handleResize.bind(this));
     }
 
