@@ -68,7 +68,7 @@ export default class Section2 extends React.Component {
         console.log(( y / 90 ) * 2 - 1, -( x / 90 ) * 2 + 1);
     }
 
-    handlePointerMove(e) {
+    handleMouseMove(e) {
         this.mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
         this.mouse.y = -( (e.clientY - e.target.getBoundingClientRect().top) / window.innerHeight ) * 2 + 1;
     }
@@ -151,7 +151,7 @@ export default class Section2 extends React.Component {
                         <img data-src="/me_b&w.jpg" data-hover="/me.jpg" className="profile" />
                     </div>
 
-                    <div id="stage" onPointerMove={(e)=> this.handlePointerMove(e)} ref={ref => (this.mount = ref)}></div>
+                    <div id="stage" onMouseMove={(e)=> this.handleMouseMove(e)} ref={ref => (this.mount = ref)}></div>
                 </div>
             </section>
         );

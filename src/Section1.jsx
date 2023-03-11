@@ -162,7 +162,7 @@ export default class Section1 extends React.Component {
         .catch( console.error );
     }
 
-    handlePointerMove(e) { 
+    handleMouseMove(e) { 
         this.resetRotation();
 
         this.pointer.x = ( e.pageX / window.innerWidth ) * 2 - 1;
@@ -257,7 +257,7 @@ export default class Section1 extends React.Component {
         return (
             <section>
                 {(typeof( DeviceOrientationEvent ) !== "undefined" && typeof( DeviceOrientationEvent.requestPermission ) === "function" && !this.state.closeInfobar && this.state.showInfobar ) && <Infobar handleCloseInfobar={this.handleCloseInfobar} handleDeviceOrientationPermission={this.handleDeviceOrientationPermission} />}
-                <div className="section1" onPointerMove={(e)=> this.handlePointerMove(e)} ref={ref => (this.mount = ref) }  />
+                <div className="section1" onMouseMove={(e)=> this.handleMouseMove(e)} ref={ref => (this.mount = ref) }  />
             </section>
         );
     }
