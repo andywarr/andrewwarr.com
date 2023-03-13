@@ -190,6 +190,7 @@ export default class Section1 extends React.Component {
         this.meshes = [];
         
         this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.setPixelRatio(window.devicePixelRatio);
     
         this.setUpCamera();
         this.drawTriangles();
@@ -243,6 +244,7 @@ export default class Section1 extends React.Component {
 
         window.addEventListener("deviceorientation", this.handleDeviceOrientation.bind(this));
         window.addEventListener('resize', this.handleResize.bind(this));
+        screen.addEventListener('orientationchange', this.handleResize.bind(this));
 
         setTimeout(() => {
             if(!this.handleDeviceOrientationEvent) {
