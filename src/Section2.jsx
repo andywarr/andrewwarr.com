@@ -46,26 +46,44 @@ export default class Section2 extends React.Component {
 	}
 
     handleDeviceOrientation(e) {
-        let x = e.beta; // In degree in the range [-180,180)
-        let y = e.gamma; // In degree in the range [-90,90)
+        let x = e.beta;
+        let y = e.gamma;
     
-        //Constrain the x value to the range [-90,90]
-        if (x > 90) {
-            x = 90;
-        }
-        if (x < -90) {
-            x = -90;
-        }
-        if (y > 90) {
-            y = 90;
-        }
-        if (y < -90) {
-            y = -90;
-        }
+        //Constrain the x,y value to the range [-90,90]
+        // if (x > 90) {
+        //     x = 90;
+        // }
+        // if (x < -90) {
+        //     x = -90;
+        // }
+        // if (y > 90) {
+        //     y = 90;
+        // }
+        // if (y < -90) {
+        //     y = -90;
+        // }
 
-        this.mouse.x = ( (y + 45) / 90 ) * 2 - 1;
-        this.mouse.y = -( (x + 45) / 90 ) * 2 + 1;
-        console.log(( y / 90 ) * 2 - 1, -( x / 90 ) * 2 + 1);
+        switch (screen.orientation.type) {
+            case "landscape-primary":
+                this.mouse.y = ( (y - 45) / 90 ) * 2 + 1;
+                this.mouse.x = ( (x - 45) / 90 ) * 2 + 1;
+                break;
+            case "landscape-secondary":
+                this.mouse.y = -( (y - 45) / 90 ) * 2 - 1;
+                this.mouse.x = -( (x - 45) / 90 ) * 2 - 1;
+                break;
+            case "portrait-secondary":
+                this.mouse.x = -( (y + 45) / 90 ) * 2 + 1;
+                this.mouse.y = ( (x + 45) / 90 ) * 2 - 1;
+                break;
+            case "portrait-primary":
+                this.mouse.x = ( (y + 45) / 90 ) * 2 - 1;
+                this.mouse.y = -( (x + 45) / 90 ) * 2 + 1;
+                break;
+            default:
+                this.mouse.x = ( (y + 45) / 90 ) * 2 - 1;
+                this.mouse.y = -( (x + 45) / 90 ) * 2 + 1;
+        }
     }
 
     handleMouseMove(e) {
@@ -74,7 +92,9 @@ export default class Section2 extends React.Component {
     }
 
     handleResize() {  
+        console.log( window.innerWidth, window.innerHeight, window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.setPixelRatio(window.devicePixelRatio);
         this.setUpCamera();
         this.setUpImage();
     }
@@ -131,6 +151,8 @@ export default class Section2 extends React.Component {
     }
 
     componentDidMount() {
+        console.log( window.innerWidth, window.innerHeight, window.devicePixelRatio );
+
         this.setUp();
 
         this.mount.appendChild( this.renderer.domElement );
@@ -141,6 +163,7 @@ export default class Section2 extends React.Component {
 
         window.addEventListener("deviceorientation", this.handleDeviceOrientation.bind(this));
         window.addEventListener('resize', this.handleResize.bind(this));
+        screen.addEventListener('orientationchange', this.handleResize.bind(this));
     }
 
     render() {
